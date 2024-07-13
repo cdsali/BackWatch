@@ -9,7 +9,7 @@ const port = 3600;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'https://smart-v2.vercel.app/',
+    origin: 'https://smart-v2.vercel.app',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }));
 // MySQL database connection
