@@ -26,6 +26,12 @@ db.connect((err) => {
     console.log('Connected to MySQL as id ' + db.threadId);
 });
 
+app.get('/',(req,res) => {
+
+res.send('helllo');
+
+})
+
 // Route to handle contact form submission
 app.post('/contact', (req, res) => {
     console.log("hello is me");
