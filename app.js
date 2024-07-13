@@ -2,9 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
-const { body, validationResult } = require('express-validator');
-
 const app = express();
 const port = 3600;
 
@@ -12,17 +9,6 @@ const port = 3600;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-
-// Rate limiting middleware
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
-    message: 'Too many requests from this IP, please try again later.'
-});
-
-// Apply rate limiting to all requests
-app.use(limiter);
-
 // MySQL database connection
 const db = mysql.createConnection({
     host: '50.87.145.190', // Replace with your database host
@@ -41,18 +27,14 @@ db.connect((err) => {
 });
 
 // Route to handle contact form submission
-app.post('/contact', [
-    // Validate and sanitize input
-    body('name').trim().isLength({ min: 1 }).escape().withMessage('Name is required'),
-    body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
-    body('message').trim().isLength({ min: 1 }).escape().withMessage('Message is required')
-], (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
+app.post('/contact', (req, res) => {
+    console.log("hello is me");
     const { name, email, message } = req.body;
+
+    // Validate input
+    if (!name || !email || !message) {
+        return res.status(400).send('All fields are required');
+    }
 
     const query = 'INSERT INTO Contacts (name, email, message) VALUES (?, ?, ?)';
     db.query(query, [name, email, message], (err, result) => {
