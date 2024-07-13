@@ -8,16 +8,7 @@ const port = 3600;
 // Middleware to parse JSON and URL-encoded data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// CORS middleware
-app.use(cors({
-    origin: [
-        'https://smart-v2.vercel.app', // Allow requests from your Vercel frontend
-        // Add more origins as needed
-    ],
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
-}));
-
+app.use(cors());
 // MySQL database connection
 const db = mysql.createConnection({
     host: '50.87.145.190', // Replace with your database host
